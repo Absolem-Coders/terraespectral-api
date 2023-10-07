@@ -18,7 +18,6 @@ return new class extends Migration {
       $table->text('url')->nullable()->unique();
       $table->text('mrds_id')->nullable();
       $table->text('mas_id')->nullable();
-      $table->text('commod')->nullable();
       $table->text('site_name')->nullable();
       $table->text('latitude')->nullable();
       $table->text('longitude')->nullable();
@@ -27,6 +26,7 @@ return new class extends Migration {
       $table->text('state')->nullable();
       $table->text('county')->nullable();
       $table->text('com_type')->nullable();
+      $table->text('commod')->nullable();
       $table->text('commod1')->nullable();
       $table->text('commod2')->nullable();
       $table->text('commod3')->nullable();
