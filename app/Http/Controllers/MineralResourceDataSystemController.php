@@ -4,21 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SearchMineralResourceDataSystemRequest;
 use App\Models\MineralResourceDataSystem;
+use Illuminate\Http\JsonResponse;
 
 class MineralResourceDataSystemController extends Controller
 {
   /**
    * Display a listing of the resource.
    */
-  public function index()
+  public function index(): JsonResponse
   {
     $page = request()->get('page', 1);
     $perPage = request()->get('per_page', 25);
-    $sort = request()->get('sort', 'id');
+    $sortBy = request()->get('sort_by', 'id');
+    $thenBy = request()->get('then_by', 'created_at');
     $order = request()->get('order', 'asc');
 
     $mineralResourceDataSystems = MineralResourceDataSystem::query()
-      ->orderBy($sort, $order)
+      ->orderBy($sortBy, $order)
+      ->orderBy($thenBy, $order)
       ->paginate($perPage, ['*'], 'page', $page);
 
     return response()->json($mineralResourceDataSystems);
@@ -27,18 +30,19 @@ class MineralResourceDataSystemController extends Controller
   /**
    * Display the specified resource.
    */
-  public function show()
+  public function show(): JsonResponse
   {
     $mineralResourceDataSystem = MineralResourceDataSystem::query()->find(request()->route('id'));
 
     return response()->json($mineralResourceDataSystem);
   }
 
-  public function search(SearchMineralResourceDataSystemRequest $request)
+  public function search(SearchMineralResourceDataSystemRequest $request): JsonResponse
   {
     $page = $request->get('page', 1);
     $perPage = $request->get('per_page', 25);
-    $sort = $request->get('sort', 'id');
+    $sortBy = $request->get('sort_by', 'id');
+    $thenBy = $request->get('then_by', 'created_at');
     $order = $request->get('order', 'asc');
 
     $mineralResourceDataSystems = MineralResourceDataSystem::query()
@@ -75,13 +79,14 @@ class MineralResourceDataSystemController extends Controller
       ->when($request->has('oper_type'), function ($query) use ($request) {
         $query->where('oper_type', 'ilike', '%' . $request->get('oper_type') . '%');
       })
-      ->orderBy($sort, $order)
+      ->orderBy($sortBy, $order)
+      ->orderBy($thenBy, $order)
       ->paginate($perPage, ['*'], 'page', $page);
 
     return response()->json($mineralResourceDataSystems);
   }
 
-  public function list()
+  public function list(): JsonResponse
   {
     $ores = MineralResourceDataSystem::query()
       ->select('ore')
