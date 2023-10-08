@@ -49,31 +49,31 @@ class MineralResourceDataSystemController extends Controller
         $query->where('longitude', 'like', $request->get('longitude') . '%');
       })
       ->when($request->has('ore'), function ($query) use ($request) {
-        $query->where('ore', 'like', '%' . $request->get('ore') . '%');
+        $query->where('ore', 'ilike', '%' . $request->get('ore') . '%');
       })
       ->when($request->has('score'), function ($query) use ($request) {
-        $query->where('score', 'like', '%' . $request->get('score') . '%');
+        $query->where('score', 'ilike', '%' . $request->get('score') . '%');
       })
       ->when($request->has('disc_yr'), function ($query) use ($request) {
-        $query->where('disc_yr', 'like', '%' . $request->get('disc_yr') . '%');
+        $query->where('disc_yr', 'ilike', '%' . $request->get('disc_yr') . '%');
       })
       ->when($request->has('reporter'), function ($query) use ($request) {
-        $query->where('reporter', 'like', '%' . $request->get('reporter') . '%');
+        $query->where('reporter', 'ilike', '%' . $request->get('reporter') . '%');
       })
       ->when($request->has('region'), function ($query) use ($request) {
-        $query->where('region', 'like', '%' . $request->get('region') . '%');
+        $query->where('region', 'ilike', '%' . $request->get('region') . '%');
       })
       ->when($request->has('country'), function ($query) use ($request) {
-        $query->where('country', 'like', '%' . $request->get('country') . '%');
+        $query->where('country', 'ilike', '%' . $request->get('country') . '%');
       })
       ->when($request->has('state'), function ($query) use ($request) {
-        $query->where('state', 'like', '%' . $request->get('state') . '%');
+        $query->where('state', 'ilike', '%' . $request->get('state') . '%');
       })
       ->when($request->has('county'), function ($query) use ($request) {
-        $query->where('county', 'like', '%' . $request->get('county') . '%');
+        $query->where('county', 'ilike', '%' . $request->get('county') . '%');
       })
       ->when($request->has('oper_type'), function ($query) use ($request) {
-        $query->where('oper_type', 'like', '%' . $request->get('oper_type') . '%');
+        $query->where('oper_type', 'ilike', '%' . $request->get('oper_type') . '%');
       })
       ->orderBy($sort, $order)
       ->paginate($perPage, ['*'], 'page', $page);
