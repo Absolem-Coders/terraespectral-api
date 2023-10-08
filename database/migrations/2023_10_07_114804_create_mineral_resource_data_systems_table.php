@@ -19,8 +19,8 @@ return new class extends Migration {
       $table->text('mrds_id')->nullable();
       $table->text('mas_id')->nullable();
       $table->text('site_name')->nullable();
-      $table->text('latitude')->nullable();
-      $table->text('longitude')->nullable();
+      $table->double('latitude')->nullable();
+      $table->double('longitude')->nullable();
       $table->text('region')->nullable();
       $table->text('country')->nullable();
       $table->text('state')->nullable();
