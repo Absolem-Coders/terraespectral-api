@@ -11,12 +11,20 @@
 |
 */
 
+use App\Http\Controllers\MineralResourceDataSystemController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['api'])->group(function () {
+Route::group(['/'], function () {
   Route::get("hello", function () {
     return response()->json([
       "message" => "Hello World"
     ]);
   });
+});
+
+Route::prefix('mrds')->controller(MineralResourceDataSystemController::class)->group(function () {
+  Route::get('/', 'index');
+  Route::get('/{id}', 'show')->whereNumber('id');
+  Route::get('/search', 'search');
+  Route::get('/list', 'list');
 });
