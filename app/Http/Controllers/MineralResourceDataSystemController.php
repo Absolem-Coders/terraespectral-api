@@ -46,14 +46,22 @@ class MineralResourceDataSystemController extends Controller
     $order = $request->get('order', 'asc');
 
     $mineralResourceDataSystems = MineralResourceDataSystem::query()
-      ->when($request->has('latitude'), function ($query) use ($request) {
-        $query->where('latitude', 'like', $request->get('latitude') . '%');
-      })
-      ->when($request->has('longitude'), function ($query) use ($request) {
-        $query->where('longitude', 'like', $request->get('longitude') . '%');
+      ->when($request->has('latitude') && $request->has('longitude'), function ($query) use ($request) {
+        $latitude = $request->get('latitude');
+        $longitude = $request->get('longitude');
+
+        $query->where('latitude', '>=', $latitude - 0.5)
+          ->where('latitude', '<=', $latitude + 0.5)
+          ->where('longitude', '>=', $longitude - 0.5)
+          ->where('longitude', '<=', $longitude + 0.5);
       })
       ->when($request->has('ore'), function ($query) use ($request) {
-        $query->where('ore', 'ilike', '%' . $request->get('ore') . '%');
+        $query
+          ->where('ore', 'ilike', '%' . $request->get('ore') . '%')
+          ->orWhere('commod', 'ilike', '%' . $request->get('ore') . '%')
+          ->orWhere('commod1', 'ilike', '%' . $request->get('ore') . '%')
+          ->orWhere('commod2', 'ilike', '%' . $request->get('ore') . '%')
+          ->orWhere('commod3', 'ilike', '%' . $request->get('ore') . '%');
       })
       ->when($request->has('score'), function ($query) use ($request) {
         $query->where('score', 'ilike', '%' . $request->get('score') . '%');
@@ -111,36 +119,6 @@ class MineralResourceDataSystemController extends Controller
     $countries = array_filter($countries);
     $countries = array_values($countries);
 
-    $regions = MineralResourceDataSystem::query()
-      ->select('region')
-      ->distinct()
-      ->get();
-
-    $regions = $regions->groupBy('region')->keys()->unique()->values();
-    $regions = array_map('trim', $regions->toArray());
-    $regions = array_filter($regions);
-    $regions = array_values($regions);
-
-    $states = MineralResourceDataSystem::query()
-      ->select('state')
-      ->distinct()
-      ->get();
-
-    $states = $states->groupBy('state')->keys()->unique()->values();
-    $states = array_map('trim', $states->toArray());
-    $states = array_filter($states);
-    $states = array_values($states);
-
-    $counties = MineralResourceDataSystem::query()
-      ->select('county')
-      ->distinct()
-      ->get();
-
-    $counties = $counties->groupBy('county')->keys()->unique()->values();
-    $counties = array_map('trim', $counties->toArray());
-    $counties = array_filter($counties);
-    $counties = array_values($counties);
-
     $operTypes = MineralResourceDataSystem::query()
       ->select('oper_type')
       ->distinct()
@@ -152,12 +130,9 @@ class MineralResourceDataSystemController extends Controller
     $operTypes = array_values($operTypes);
 
     $response = [
-      'ores' => $ores,
-      'countries' => $countries,
-      'regions' => $regions,
-      'states' => $states,
-      'counties' => $counties,
-      'operTypes' => $operTypes
+      'ores' => $ores->sort()->values(),
+      'countries' => $countries->sort()->values(),
+      'operTypes' => $operTypes->sort()->values()
     ];
 
     return response()->json($response);
