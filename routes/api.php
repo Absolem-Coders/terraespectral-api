@@ -26,5 +26,5 @@ Route::prefix('mrds')->controller(MineralResourceDataSystemController::class)->g
   Route::get('/', 'index');
   Route::get('/{id}', 'show')->whereNumber('id');
   Route::get('/search', 'search');
-  Route::get('/list', 'list');
+  Route::get('/list', 'listInputs');
 });
