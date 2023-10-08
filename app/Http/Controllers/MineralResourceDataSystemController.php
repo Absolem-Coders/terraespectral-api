@@ -119,6 +119,8 @@ class MineralResourceDataSystemController extends Controller
     $countries = array_filter($countries);
     $countries = array_values($countries);
 
+    sort($countries);
+
     $operTypes = MineralResourceDataSystem::query()
       ->select('oper_type')
       ->distinct()
@@ -129,10 +131,12 @@ class MineralResourceDataSystemController extends Controller
     $operTypes = array_filter($operTypes);
     $operTypes = array_values($operTypes);
 
+    sort($operTypes);
+
     $response = [
       'ores' => $ores->sort()->values(),
-      'countries' => $countries->sort()->values(),
-      'operTypes' => $operTypes->sort()->values()
+      'countries' => $countries,
+      'operTypes' => $operTypes
     ];
 
     return response()->json($response);
