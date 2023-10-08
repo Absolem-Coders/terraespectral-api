@@ -24,5 +24,7 @@ Route::group(['/'], function () {
 
 Route::prefix('mrds')->controller(MineralResourceDataSystemController::class)->group(function () {
   Route::get('/', 'index');
-  Route::get('/{id}', 'show');
+  Route::get('/{id}', 'show')->whereNumber('id');
+  Route::get('/search', 'search');
+  Route::get('/list', 'list');
 });
