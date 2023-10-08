@@ -50,42 +50,37 @@ class MineralResourceDataSystemController extends Controller
         $latitude = $request->get('latitude');
         $longitude = $request->get('longitude');
 
-        $query->where('latitude', '>=', $latitude - 0.5)
+        return $query->where('latitude', '>=', $latitude - 0.5)
           ->where('latitude', '<=', $latitude + 0.5)
           ->where('longitude', '>=', $longitude - 0.5)
           ->where('longitude', '<=', $longitude + 0.5);
       })
       ->when($request->has('ore'), function ($query) use ($request) {
-        $query
-          ->where('ore', 'ilike', '%' . $request->get('ore') . '%')
-          ->orWhere('commod', 'ilike', '%' . $request->get('ore') . '%')
-          ->orWhere('commod1', 'ilike', '%' . $request->get('ore') . '%')
-          ->orWhere('commod2', 'ilike', '%' . $request->get('ore') . '%')
-          ->orWhere('commod3', 'ilike', '%' . $request->get('ore') . '%');
-      })
-      ->when($request->has('score'), function ($query) use ($request) {
-        $query->where('score', 'ilike', '%' . $request->get('score') . '%');
-      })
-      ->when($request->has('disc_yr'), function ($query) use ($request) {
-        $query->where('disc_yr', 'ilike', '%' . $request->get('disc_yr') . '%');
-      })
-      ->when($request->has('reporter'), function ($query) use ($request) {
-        $query->where('reporter', 'ilike', '%' . $request->get('reporter') . '%');
-      })
-      ->when($request->has('region'), function ($query) use ($request) {
-        $query->where('region', 'ilike', '%' . $request->get('region') . '%');
+        return $query->where('ore', 'ilike', '%' . $request->get('ore') . '%');
       })
       ->when($request->has('country'), function ($query) use ($request) {
-        $query->where('country', 'ilike', '%' . $request->get('country') . '%');
+        return $query->where('country', 'ilike', '%' . $request->get('country') . '%');
+      })
+      ->when($request->has('score'), function ($query) use ($request) {
+        return $query->where('score', 'ilike', '%' . $request->get('score') . '%');
+      })
+      ->when($request->has('disc_yr'), function ($query) use ($request) {
+        return $query->where('disc_yr', 'ilike', '%' . $request->get('disc_yr') . '%');
+      })
+      ->when($request->has('reporter'), function ($query) use ($request) {
+        return $query->where('reporter', 'ilike', '%' . $request->get('reporter') . '%');
+      })
+      ->when($request->has('region'), function ($query) use ($request) {
+        return $query->where('region', 'ilike', '%' . $request->get('region') . '%');
       })
       ->when($request->has('state'), function ($query) use ($request) {
-        $query->where('state', 'ilike', '%' . $request->get('state') . '%');
+        return $query->where('state', 'ilike', '%' . $request->get('state') . '%');
       })
       ->when($request->has('county'), function ($query) use ($request) {
-        $query->where('county', 'ilike', '%' . $request->get('county') . '%');
+        return $query->where('county', 'ilike', '%' . $request->get('county') . '%');
       })
       ->when($request->has('oper_type'), function ($query) use ($request) {
-        $query->where('oper_type', 'ilike', '%' . $request->get('oper_type') . '%');
+        return $query->where('oper_type', 'ilike', '%' . $request->get('oper_type') . '%');
       })
       ->orderBy($sortBy, $order)
       ->orderBy($thenBy, $order)
@@ -136,7 +131,7 @@ class MineralResourceDataSystemController extends Controller
     $response = [
       'ores' => $ores->sort()->values(),
       'countries' => $countries,
-      'operTypes' => $operTypes
+      'oper_types' => $operTypes
     ];
 
     return response()->json($response);
